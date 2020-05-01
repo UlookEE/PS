@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <vector>
 #include <queue>
-
+#include <cassert>
 using namespace std;
 
 typedef pair<int, int> ii;
@@ -10,12 +10,31 @@ typedef pair<int, int> ii;
 const int MAX_V = 502;
 const int INF = 987654321;
 
-int dist[MAX_V], cost[MAX_V];
+/* 
+* Dist must be long long because maximum is 
+* -10000(edge max val) * 500(vertex max) * 500(max cycle size)
+*/
+long long dist[MAX_V];
 int inQ[MAX_V];
-int prev_v[MAX_V];
 int cycle[MAX_V];
-
 vector<ii> adj[MAX_V];
+
+/*
+* MAX_V : MAXIMUN vertex count
+* INF : VALUE OF INFINITE
+* dist : distance from vertex 1
+* cycle : check visit count... count >=n -> cycle
+* adj : edge list
+*/
+
+/* 
+* SPFA Algorithm
+* Worst Time Complexity O(V*E)
+* Average Time Complexity O(V+E) or O(E)
+
+* Bellman-Ford : Update for all edge
+-> SPFA : Update vertex which connected with updated vertex
+*/
 
 int main()
 {
@@ -31,11 +50,15 @@ int main()
         adj[from].push_back({to, val});
     }
 
+    /* Fill INF to dist array */
     fill(dist, dist + MAX_V, INF);
+
+    /* Push updated vertex */
     queue<int> q;
+
+    /* First push vertex is 1 */
     dist[1] = 0;
     inQ[1] = true;
-
     q.push(1);
     cycle[1]++;
 
@@ -49,10 +72,10 @@ int main()
         {
             int next = adj[here][i].first;
             int cost = adj[here][i].second;
-            if (dist[next] > dist[here] + cost)
+            if (dist[next] > dist[here] + cost && dist)
             {
+                /* Update vetices.... */
                 dist[next] = dist[here] + cost;
-                prev_v[next] = here;
                 if (!inQ[next])
                 {
                     cycle[next]++;
