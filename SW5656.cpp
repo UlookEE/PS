@@ -5,8 +5,8 @@
 using namespace std;
 
 int T, N, W, H;
-int arr[20][20];
-int top[20];
+int arr[15][12];
+int top[12];
 int ans;
 
 void calc_top()
