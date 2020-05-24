@@ -7,8 +7,8 @@ using namespace std;
 
 int N, M;
 int arr[50][50];
+int carr[50][50];
 
-//0435
 struct pos {
 	int y;
 	int x;
@@ -19,22 +19,25 @@ struct qnode {
 	int x;
 	int time;
 };
+
 typedef deque<qnode> QP;
 typedef vector<pos> VP;
+
+#define INF 987654321
 VP vp;
 QP qp;
-int emptyCount = 0;
 
+int emptyCount = 0;
 int dy[] = { -1,1,0,0};
 int dx[] = { 0,0,-1,1 };
+int answer = INF;
 
 bool in_range(int y, int x) {
 	return x >= 0 && y >= 0 && x < N&& y < N;
 }
 
-int answer = 1234123;
+
 void process(QP q) {
-	int carr[50][50];
 	memcpy(carr, arr, sizeof(arr));
 	int count = vp.size();
 	int maxTime = 0;
@@ -42,6 +45,8 @@ void process(QP q) {
 		if (count == emptyCount)
 			break;
 		auto ele = q.front();
+		if (ele.time == answer)
+			break;
 		q.pop_front();
 		carr[ele.y][ele.x] = 3;
 		for (int i = 0; i < 4; i++) {
@@ -67,9 +72,9 @@ void process(QP q) {
 }
 
 void combination(int n, int r) {
-	if (n < 0 || r < 0 || n < r)
+	if (n < 0 || n < r)
 		return;
-	if (n == 0) {
+	if (r == 0) {
 		process(qp);
 		return;
 	}
@@ -100,7 +105,7 @@ int main() {
 		}
 	}
 	solve();
-	if (answer == 1234123)
+	if (answer == INF)
 		answer = -1;
 	cout << answer << '\n';
 	return 0;
